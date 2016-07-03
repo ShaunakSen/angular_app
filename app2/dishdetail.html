@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="row row-content" ng-controller="dishDetailController">
+        <div class="col-xs-12">
+            <ul class="media-list tab-pane fade in active">
+                <li class="media">
+                    <div class="media-left media-middle">
+                        <a href="">
+                            <img class="media-object img-thumbnail" ng-src="{{dish.image}}" alt=""/>
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h2 class="media-heading">
+                            {{dish.name}}
+                            <span class="label label-danger label-xs">{{dish.label}}</span>
+                            <span class="badge">{{dish.price | currency}}</span>
+                        </h2>
+
+                        <p>{{dish.description}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-9 col-xs-offset-5">
+            <label>
+                <input type="text" class="form-control" ng-model="search"/>
+            </label>
+        </div>
+        <blockquote ng-repeat="comment in dish.comments | orderBy: order(search)">
+            <h4>
+                Ratings: {{comment.rating}}
+            </h4>
+
+            <p>Comment: {{comment.comment}}</p>
+            <footer>From {{comment.author}} on {{comment.date | date: 'd MMMM yyyy'}}</footer>
+        </blockquote>
+    </div>
+
+</div>
