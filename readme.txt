@@ -566,6 +566,162 @@ just between header and footer:
 
 <ng-include src="'menu2.html'"></ng-include>
 
+SPA
+
+Here initially when page loads Server sends the web app and assets required to run the page
+
+Subsequently when user clicks on link or button,
+a  new request goes to server but server responds only with JSON or XML data using which that particular
+section of the app is re rendered
+
+Most resources are retrieved using single page load
+Redraw parts of the page when needed without requiring a full server round trip
+
+
+View in Angular is constructed by templates driven by controllers which interact with model
+
+Role of Server in SPA
+-Serves up data using REST API
+-Supplies static HTML,Angular templates, and resources
+
+Client:
+-Rendering View
+-Templating and Routing
+
+Server is more like a data source here
+
+
+Deep Linking
+
+All resources on web are identified by url
+
+Deep Linking - Hyperlink that specifies a link to a searchable or indexed piece of web content
+
+eg:
+
+http://www.conFusion.foof/index.html#/menu/0
+
+
+server/page#/intra-page references
+
+SPA use this # approach
+
+Anything following # in url does not lead to page reload
+
+so we can change that part without causing page reload
+
+
+
+Angular has a service called $location
+
+This keeps a watch and observes the url
+
+if changes occur we can recognize the change
+also we can change url
+
+we can manipulate hash portion
+
+url()-get/set the url
+path()-get/set the path
+search()-get/set the search part
+hash()-get/set the hash part
+
+
+Routing
+
+Changing views based on hash
+
+
+
+In our start.html
+include angular route
+
+<script src="scripts/angular-route.js"></script>
+
+Configuring links in nav bar:
+
+<a href="#/">
+    <span class="glyphicon glyphicon-home"
+          aria-hidden="true"></span> Home
+</a>
+<a href="#/aboutus">
+    <span class="glyphicon glyphicon-info-sign"
+          aria-hidden="true"></span> About
+</a>
+<a href="#/menu">
+     <span class="glyphicon glyphicon-list-alt"
+           aria-hidden="true"></span>
+Menu
+</a>
+<a href="#/contactus">
+    <i class="fa fa-envelope-o"></i> Contact
+</a>
+
+
+Replace ng-include with ng-view
+
+In app3.js let us configure the routes
+
+
+DI:
+var myApp = angular.module('confusionApp', ['ngRoute'])
+    .config(function ($routeProvider) {
+        console.log('ok..');
+        $routeProvider
+            .when('/contactus', {
+                templateUrl: 'contactus.html',
+                controller: 'ContactController'
+            })
+            .when('/menu', {
+                templateUrl: 'menu2.html',
+                controller: 'MenuController'
+            })
+            .when('/menu/:id', {
+                templateUrl: 'dishdetail.html',
+                controller: 'dishDetailController'
+            })
+            .otherwise('/contactus');
+
+});
+
+
+Now our routes are all set up
+
+What we wanna do next is when i click on one of the images in the menu i want details of that dish to be displayed
+
+Configure dishes object in services.js
+
+set _id property for each
+
+Note server automatically does this for us
+
+here we explicitly assign
+
+In menu2.html
+
+<img class="media-object img-thumbnail" ng-src="{{dish.image}}" alt=""/>
+
+This is dish image
+
+<a href="#/menu/{{dish._id}}">
+    <img class="media-object img-thumbnail" ng-src="{{dish.image}}" alt=""/>
+</a>
+
+
+Now we want to access this id passed in the route
+
+we can do this via $routeParams property in controller
+
+.controller('dishDetailController', ['$scope', '$routeParams', 'menuFactory',
+        function ($scope, $routeParams, menuFactory) {
+        ....
+        }
+
+
+var dish = menuFactory.getDish(parseInt($routeParams.id, 10));
+
+
+
 
 
 

@@ -33,18 +33,31 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#/">
+                <li class="active">
+                    <a href="#/">
                         <span class="glyphicon glyphicon-home"
-                              aria-hidden="true"></span> Home</a></li>
-                <li><a href="#/aboutus">
+                              aria-hidden="true"></span> Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#/aboutus">
                         <span class="glyphicon glyphicon-info-sign"
-                              aria-hidden="true"></span> About</a></li>
-                <li><a href="#/menu">
+                              aria-hidden="true"></span> About
+                    </a>
+
+                </li>
+                <li>
+                    <a href="#/menu">
                          <span class="glyphicon glyphicon-list-alt"
                                aria-hidden="true"></span>
-                    Menu</a></li>
-                <li><a href="#/contactus">
-                    <i class="fa fa-envelope-o"></i> Contact</a></li>
+                    Menu
+                    </a>
+                </li>
+                <li>
+                    <a href="#/contactus">
+                    <i class="fa fa-envelope-o"></i> Contact
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -74,7 +87,8 @@
 </header>
 
 <!--INCLUDE ANGULAR TEMPLATE-->
-<ng-include src="'assgn2.html'"></ng-include>
+<ng-view>
+</ng-view>
 <!--/INCLUDE ANGULAR TEMPLATE-->
 
 <footer class="row-footer">
@@ -122,6 +136,7 @@
 
 <!-- build:js scripts/main.js -->
 <script src="../bower_components/angular/angular.js"></script>
+<script src="scripts/angular-route.js"></script>
 <script src="scripts/app3.js"></script>
 <script src="scripts/controllers.js"></script>
 <script src="scripts/services.js"></script>

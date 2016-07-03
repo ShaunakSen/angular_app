@@ -1,5 +1,6 @@
-var myApp = angular.module('confusionApp', [])
+myApp
     .controller('MenuController', ['$scope', 'menuFactory', function ($scope, menuFactory) {
+        console.log('here');
         $scope.tab = 1;
         $scope.filtText = '';
         $scope.showDetails = true;
@@ -30,96 +31,137 @@ var myApp = angular.module('confusionApp', [])
         };
 
     }])
-    .controller('dishDetailController', ['$scope', 'menuFactory', function ($scope, menuFactory) {
-        $scope.search = '';
+    .controller('ContactController', ['$scope', function ($scope) {
+        $scope.feedback = {
+            mychannel: "",
+            firstName: "",
+            lastName: "",
+            agree: false,
+            email: ""
+        };
+        $scope.channels = [{value: "tel", label: "Tel."}, {value: "Email", label: "Email"}];
+        $scope.invalidChannelSelection = false;
 
-        var dish = menuFactory.getDish(3);
+    }])
+    .controller('FeedbackController', ['$scope', function ($scope) {
 
-        function inArray(array, item) {
-            for (var i = 0; i < array.length; ++i) {
-                if (array[i] === item) {
-                    return true;
-                }
-            }
-            return false;
-        }
+        $scope.sendFeedback = function () {
+            console.log($scope.feedback);
 
-        $scope.dish = dish;
-        $scope.order = function (param) {
-            orderString = '';
-            var acceptable2 = ['-rating', '-date', '-author', '-comment'];
-            var acceptable = ['rating', 'date', 'author', 'comment'];
-            if (param.charAt(0) === '-') {
-                if (inArray(acceptable2, param)) {
-                    return param;
-                }
-                else {
-                    return '';
-                }
+            if ($scope.feedback.agree && $scope.feedback.mychannel == "") {
+                $scope.invalidChannelSelection = true;
+                console.log('incorrect option');
             }
             else {
-                if (inArray(acceptable, param)) {
-                    return param;
-                }
-                else {
-                    return '';
-                }
+                $scope.invalidChannelSelection = false;
+                //here ideally u would issue AJAX call to send data to server
+                // restore default values now
+                $scope.feedback = {
+                    mychannel: "",
+                    firstName: "",
+                    lastName: "",
+                    agree: false,
+                    email: ""
+                };
+                $scope.feedbackForm.$setPristine();
+                console.log('Restored default values.... ' + $scope.feedback);
+
             }
         }
+
     }])
+    .controller('dishDetailController', ['$scope', '$routeParams', 'menuFactory',
+        function ($scope, $routeParams, menuFactory) {
+
+            $scope.search = '';
+
+            var dish = menuFactory.getDish(parseInt($routeParams.id, 10));
+
+            function inArray(array, item) {
+                for (var i = 0; i < array.length; ++i) {
+                    if (array[i] === item) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            $scope.dish = dish;
+            $scope.order = function (param) {
+                orderString = '';
+                var acceptable2 = ['-rating', '-date', '-author', '-comment'];
+                var acceptable = ['rating', 'date', 'author', 'comment'];
+                if (param.charAt(0) === '-') {
+                    if (inArray(acceptable2, param)) {
+                        return param;
+                    }
+                    else {
+                        return '';
+                    }
+                }
+                else {
+                    if (inArray(acceptable, param)) {
+                        return param;
+                    }
+                    else {
+                        return '';
+                    }
+                }
+            }
+        }])
     .controller('CommentFormController', ['$scope', function ($scope) {
 
-    //SETTING DEFAULT VALUES
-    $scope.comments = {
-        name: "",
-        ratings: 5,
-        comment: ""
-    };
-
-    $scope.validateTextarea = function () {
-        return $scope.comments['comment'] == "" && !$scope.commentsForm.comment.$pristine;
-
-    };
-
-    $scope.validateForm = function () {
-        if ($scope.commentsForm.$invalid) {
-            return false;
-        }
-        else {
-            var comment = $scope.comments.comment;
-            if (comment != "")
-                return true;
-        }
-    };
-
-    $scope.processComment = function () {
-        $scope.addPreview();
-    };
-
-    $scope.addPreview = function () {
-        $scope.compatibleObject = {
-            author: "",
-            rating: 5,
-            comment: "",
-            date: "Ok"
-        };
-        $scope.compatibleObject.author = $scope.comments.name;
-        $scope.compatibleObject.rating = $scope.comments.ratings;
-        $scope.compatibleObject.comment = $scope.comments.comment;
-        $scope.compatibleObject.date = new Date();
-        console.log($scope.compatibleObject);
-
-        $scope.dish.comments.push($scope.compatibleObject);
-        //restore defaults
-
+        //SETTING DEFAULT VALUES
         $scope.comments = {
             name: "",
             ratings: 5,
             comment: ""
         };
 
-        $scope.commentsForm.$setPristine();
-    }
+        $scope.validateTextarea = function () {
+            return $scope.comments['comment'] == "" && !$scope.commentsForm.comment.$pristine;
+
+        };
+
+        $scope.validateForm = function () {
+            if ($scope.commentsForm.$invalid) {
+                return false;
+            }
+            else {
+                var comment = $scope.comments.comment;
+                if (comment != "")
+                    return true;
+            }
+        };
+
+        $scope.processComment = function () {
+            $scope.addPreview();
+        };
+
+        $scope.addPreview = function () {
+            $scope.compatibleObject = {
+                author: "",
+                rating: 5,
+                comment: "",
+                date: "Ok"
+            };
+            $scope.compatibleObject.author = $scope.comments.name;
+            $scope.compatibleObject.rating = $scope.comments.ratings;
+            $scope.compatibleObject.comment = $scope.comments.comment;
+            $scope.compatibleObject.date = new Date();
+            console.log($scope.compatibleObject);
+
+            $scope.dish.comments.push($scope.compatibleObject);
+            //restore defaults
+
+            $scope.comments = {
+                name: "",
+                ratings: 5,
+                comment: ""
+            };
+
+            $scope.commentsForm.$setPristine();
+        }
 
 
-}]);
+    }]);
