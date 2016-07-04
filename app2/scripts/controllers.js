@@ -164,4 +164,15 @@ myApp
         }
 
 
+    }])
+    .controller('IndexController', ['$scope', 'menuFactory', 'corporateFactory',
+        function ($scope, menuFactory, corporateFactory) {
+
+            $scope.promotions = menuFactory.getPromotions();
+            $scope.cullinaryDish = menuFactory.getDish(0);
+            $scope.executiveChief = corporateFactory.getLeader(3);
+        }])
+    .controller('AboutController', ['$scope', function ($scope) {
+
     }]);
+// implement the IndexController and About Controller here
