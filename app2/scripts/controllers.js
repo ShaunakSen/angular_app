@@ -70,12 +70,12 @@ myApp
         }
 
     }])
-    .controller('dishDetailController', ['$scope', '$routeParams', 'menuFactory',
-        function ($scope, $routeParams, menuFactory) {
+    .controller('dishDetailController', ['$scope', '$stateParams', 'menuFactory',
+        function ($scope, $stateParams, menuFactory) {
 
             $scope.search = '';
 
-            var dish = menuFactory.getDish(parseInt($routeParams.id, 10));
+            var dish = menuFactory.getDish(parseInt($stateParams.id, 10));
 
             function inArray(array, item) {
                 for (var i = 0; i < array.length; ++i) {

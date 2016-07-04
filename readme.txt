@@ -720,12 +720,209 @@ we can do this via $routeParams property in controller
 
 var dish = menuFactory.getDish(parseInt($routeParams.id, 10));
 
+UI Router
+
+Limitations of ngRoute:
+
+only one view allowed per page
+no support for multiple or nested views
+application view is directly tied to root url
 
 
+UI router takes an approach based on states
+
+Views are based on state of app
+u can update view without change in url
+it supports multiple and nested views also
 
 
+Modify our app to use ui router now:
+
+DI
+var myApp = angular.module('confusionApp', ['ui.router'])
+
+Setting up our first state:
+
+var myApp = angular.module('confusionApp', ['ui.router'])
+    .config(function ($stateProvider, $urlRouterProvider) {
+        $stateProvider
+            .state('app',{
+                url: '/',
+                views: {
+                    'header': {
+                        templateUrl: 'views/header.html'
+                    },
+                    'content': {
+                        template: '<h2>To be completed</h2>',
+                        controller: 'IndexController'
+                    },
+                    'footer': {
+                        templateUrl: 'views/footer.html'
+                    }
+                }
+            })
+    });
 
 
+For our app state we set up root url
+
+We also set up multiple views
+
+.state('app.aboutus', {
+    url: 'aboutus',
+    views: {
+        'content@': {
+            template: '<h2>To be completed</h2>',
+            controller: 'AboutController'
+        }
+    }
+})
+
+aboutus is nested state under app
+
+content@ means this is the only part that i want to replace
+
+header and footer views will be retained as such
+
+.state('app.contactus', {
+    url: 'contactus',
+    views: {
+        'content@': {
+            templateUrl: 'views/contactus.html',
+            controller: 'ContactController'
+        }
+    }
+})
+.state('app.menu', {
+    url: 'menu',
+    views: {
+        'content@': {
+            templateUrl: 'views/menu.html',
+            controller: 'MenuController'
+        }
+    }
+})
+
+Now for dishDetails view:
+
+.state('app.dishdetails', {
+    url: 'menu/:id',
+    views: {
+        'content@': {
+            templateUrl: 'views/dishdetail.html',
+            controller: 'dishDetailController'
+        }
+    }
+});
+
+Note url here
+
+Finally default route:
+$urlRouterProvider.otherwise('/');
+
+Ok.. so now that we are using ui router routeparams wont work
+We need to use state params
+
+in dishDetailController:
+
+.controller('dishDetailController', ['$scope', '$stateParams', 'menuFactory',
+        function ($scope, $stateParams, menuFactory) {
+
+            $scope.search = '';
+
+            var dish = menuFactory.getDish(parseInt($stateParams.id, 10));
+
+            ....
+
+
+})
+
+Configuring templates:
+
+As we can see in config function we want to separate all the templates in a separate folder called views
+
+app2
+-->views
+
+All templates will reside in views
+only index.html will remain outside
+
+app2
+-->views
+    -->header.html
+    -->footer.html
+
+
+In index.html
+
+from body to </header> move to header.html
+Similarly <footer> to </footer> move to footer.html
+
+
+In index we are using
+
+<ng-view>
+</ng-view>
+
+We cant use this
+
+<div ui-view="header"></div>
+<div ui-view="content"></div>
+<div ui-view="footer"></div>
+
+
+Note we are using multiple views which was not possible with ngRoute
+
+In header.html
+
+in case of href we have to use ui-sref
+
+<a class="navbar-brand" ui-sref="app"><img src="images/logo.png" height=30 width=41></a>
+
+
+<ul class="nav navbar-nav">
+    <li class="active">
+        <a ui-sref="app">
+            <span class="glyphicon glyphicon-home"
+                  aria-hidden="true"></span> Home
+        </a>
+    </li>
+    <li>
+        <a ui-sref="app.aboutus">
+            <span class="glyphicon glyphicon-info-sign"
+                  aria-hidden="true"></span> About
+        </a>
+
+    </li>
+    <li>
+        <a ui-sref="app.menu">
+             <span class="glyphicon glyphicon-list-alt"
+                   aria-hidden="true"></span>
+            Menu
+        </a>
+    </li>
+    <li>
+        <a ui-sref="app.contactus">
+            <i class="fa fa-envelope-o"></i> Contact
+        </a>
+    </li>
+</ul>
+
+We specify state not url
+
+Similarly for footer
+
+Next move menu2, dishdetail and contactus files to views folder
+
+Next we need to go to menu2 and update the image href
+
+<a ui-sref="app.dishdetails({id: dish._id})">
+    <img class="media-object img-thumbnail" ng-src="{{dish.image}}" alt=""/>
+</a>
+
+From here when we click on image to go to dishdetails i also want a back button
+
+in dishdetail
 
 
 
