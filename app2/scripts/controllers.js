@@ -172,7 +172,7 @@ myApp
             $scope.cullinaryDish = menuFactory.getDish(0);
             $scope.executiveChief = corporateFactory.getLeader(3);
         }])
-    .controller('AboutController', ['$scope', function ($scope) {
-
+    .controller('AboutController', ['$scope', 'corporateFactory', function ($scope, corporateFactory) {
+        $scope.leaders = corporateFactory.getLeaders()
     }]);
 // implement the IndexController and About Controller here

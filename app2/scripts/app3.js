@@ -20,7 +20,7 @@ var myApp = angular.module('confusionApp', ['ui.router'])
                 url: 'aboutus',
                 views: {
                     'content@': {
-                        template: '<h2>To be completed</h2>',
+                        templateUrl: 'views/aboutus.html',
                         controller: 'AboutController'
                     }
                 }
