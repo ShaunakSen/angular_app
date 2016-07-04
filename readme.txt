@@ -924,6 +924,10 @@ From here when we click on image to go to dishdetails i also want a back button
 
 in dishdetail
 
+<button class="btn btn-success pull-right" type="button" ui-sref="app.menu">
+    Back To Menu
+</button>
+
 
 
 
