@@ -929,8 +929,176 @@ in dishdetail
 </button>
 
 
+Week 4
+
+set up json-server
+
+now we work in json-server/public
+
+Angular $http
+
+$http allows us to initiate either an XMLHttpRequest or JSONP Request to the server
+
+operation is asynchronous in nature
+
+Promise
+
+It is a service angular provides
+
+Promise object comes back to tell u what happened when asynchronous operation is finished
+
+States of promise object:
+
+1.Pending: Promise is not resolved yet
+2.Fulfilled
+3.Rejected
 
 
+go to services.js
 
+angular.module('confusionApp')
+    .constant("baseURL", "http://localhost:3000/")
+
+DI
+
+.service('menuFactory',['$http', 'baseURL', function ($http, baseURL) {
+
+remove hardcoded dish var
+
+this.getDishes = function () {
+    return $http.get(baseURL + "dishes");
+};
+
+this.getDish = function (index) {
+    return $http.get(baseURL + "dishes/" + index);
+};
+
+Now note that these results which we obtain from get is not available
+at once. There may be delay. We need to account for that delay in controller
+
+In MenuController:
+
+$scope.dishes = menuFactory.getDishes();
+
+This data might not be available yet
+
+$scope.dishes = {};
+menuFactory.getDishes();
+
+note menuFactory.getDishes() returns a promise object
+So we can use then() on it !!
+
+menuFactory.getDishes().then(
+    function (response) {
+        $scope.dishes = response.data;
+    }
+);
+
+in dishDetail controller
+
+ menuFactory.getDish(parseInt($stateParams.id, 10)).then(
+ function (response) {
+     $scope.dish = response.data
+ }
+);
+
+Now remember in IndexController we used the first dish to display it in home view
+we need to set that up too
+
+$scope.cullinaryDish = menuFactory.getDish(0);
+
+Note one imp thing
+
+We set up var $scope.cullinaryDish
+
+we can use $scope.dish also
+$scope.dish = menuFactory.getDish(0);
+
+Since this controller is not a child of any other controller the other definitions
+of $scope.dish wont interfere with this
+
+Accounting for $http
+
+menuFactory.getDish(0).then(function (response) {
+    $scope.dish = response.data;
+});
+
+In menu2.html:
+
+<a ui-sref="app.dishdetails({id: dish._id})">
+    <img class="media-object img-thumbnail" ng-src="{{dish.image}}" alt=""/>
+</a>
+
+ui-sref="app.dishdetails({id: dish._id})"
+
+json-server does not work well with _id
+
+Now we use just id.. as is in server data
+
+Ok so we have retrieved data from server
+
+What happens if server is down??
+
+We need to account for this
+
+We want to show msg and also loading info while server is working
+
+In MenuController:
+
+$scope.showMenu = false;
+$scope.message = 'Loading...';
+
+
+menuFactory.getDishes().then(
+    function (response) {
+        $scope.dishes = response.data;
+        $scope.showMenu = true;
+        // menu is now ready to be displayed
+    },
+    function (response) {
+        $scope.message = "Error: " + response.status + " " + response.statusText;
+    }
+);
+
+So showMenu will be set to false until we get back the data!!
+This is excellent
+
+Now we can use this in our view
+
+menu2:
+
+<div class="col-xs-12" ng-if="!showMenu">
+    <h3>{{message}}</h3>
+</div>
+
+Also:
+
+<div class="col-xs-12" ng-if="showMenu">
+    ....
+    menu view here
+
+</div>
+
+Same thing we have to do to dishDetail and index
+
+$scope.search = '';
+    $scope.dish = {};
+    $scope.showDish = false;
+    $scope.message = "Loading...";
+
+    menuFactory.getDish(parseInt($stateParams.id, 10)).then(
+    function (response) {
+     $scope.dish = response.data;
+     $scope.showDish = true;
+    },
+    function (response) {
+     $scope.message = "Error: " + response.status + " " + response.statusText;
+    }
+);
+
+
+Same for IndexController
+
+Update the views
 
 

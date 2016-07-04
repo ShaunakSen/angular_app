@@ -5,22 +5,21 @@
             <h3 align=center>Our Lipsmacking Culinary Creations</h3>
         </div>
         <div class="col-xs-12 col-sm-9 col-sm-pull-3">
-            <div class="tab-content">
-                <ul class="media-list tab-pane fade in active">
-                    <li class="media">
-                        <div class="media-left media-middle">
-                            <img class="media-object img-thumbnail" ng-src="{{cullinaryDish.image}}" alt=""/>
-                        </div>
-                        <div class="media-body">
-                            <h2 class="media-heading">
-                                {{cullinaryDish.name}}
-                                <span class="label label-danger label-xs">{{cullinaryDish.label}}</span>
-                                <span class="badge">{{cullinaryDish.price | currency}}</span>
-                            </h2>
-                            <p>{{cullinaryDish.description}}</p>
-                        </div>
-                    </li>
-                </ul>
+            <div ng-if="!showDish">
+                <h3>{{message}}</h3>
+            </div>
+            <div class="media" ng-if="showDish">
+                <div class="media-left media-middle">
+                    <img class="media-object img-thumbnail" ng-src="{{dish.image}}" alt=""/>
+                </div>
+                <div class="media-body">
+                    <h2 class="media-heading">
+                        {{dish.name}}
+                        <span class="label label-danger label-xs">{{dish.label}}</span>
+                        <span class="badge">{{dish.price | currency}}</span>
+                    </h2>
+                    <p>{{dish.description}}</p>
+                </div>
             </div>
         </div>
     </div>
@@ -36,7 +35,7 @@
                 <ul class="media-list tab-pane fade in active">
                     <li class="media" ng-repeat="promotion in promotions">
                         <div class="media-left media-middle">
-                                <img class="media-object img-thumbnail" ng-src="{{promotion.image}}" alt=""/>
+                            <img class="media-object img-thumbnail" ng-src="{{promotion.image}}" alt=""/>
                         </div>
                         <div class="media-body">
                             <h2 class="media-heading">

@@ -4,11 +4,24 @@ myApp
         $scope.tab = 1;
         $scope.filtText = '';
         $scope.showDetails = true;
+        $scope.showMenu = false;
+        $scope.message = 'Loading...';
 
         $scope.toggleDetails = function () {
             $scope.showDetails = !$scope.showDetails
         };
-        $scope.dishes = menuFactory.getDishes();
+
+        $scope.dishes = {};
+        menuFactory.getDishes().then(
+            function (response) {
+                $scope.dishes = response.data;
+                $scope.showMenu = true;
+                // menu is now ready to be displayed
+            },
+            function (response) {
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        );
 
         $scope.select = function (setTab) {
             $scope.tab = setTab;
@@ -74,8 +87,19 @@ myApp
         function ($scope, $stateParams, menuFactory) {
 
             $scope.search = '';
+            $scope.dish = {};
+            $scope.showDish = false;
+            $scope.message = "Loading...";
 
-            var dish = menuFactory.getDish(parseInt($stateParams.id, 10));
+            menuFactory.getDish(parseInt($stateParams.id, 10)).then(
+                function (response) {
+                    $scope.dish = response.data;
+                    $scope.showDish = true;
+                },
+                function (response) {
+                    $scope.message = "Error: " + response.status + " " + response.statusText;
+                }
+            );
 
             function inArray(array, item) {
                 for (var i = 0; i < array.length; ++i) {
@@ -86,7 +110,6 @@ myApp
                 return false;
             }
 
-            $scope.dish = dish;
             $scope.order = function (param) {
                 orderString = '';
                 var acceptable2 = ['-rating', '-date', '-author', '-comment'];
@@ -168,8 +191,18 @@ myApp
     .controller('IndexController', ['$scope', 'menuFactory', 'corporateFactory',
         function ($scope, menuFactory, corporateFactory) {
 
+            $scope.dish = {};
+            $scope.showDish = false;
+            $scope.message = "Loading...";
             $scope.promotions = menuFactory.getPromotions();
-            $scope.cullinaryDish = menuFactory.getDish(0);
+            menuFactory.getDish(0).then(function (response) {
+                    $scope.dish = response.data;
+                    $scope.showDish = true;
+                },
+                function (response) {
+                    $scope.message = "Error: " + response.status + " " + response.statusText;
+                }
+            );
             $scope.executiveChief = corporateFactory.getLeader(3);
         }])
     .controller('AboutController', ['$scope', 'corporateFactory', function ($scope, corporateFactory) {

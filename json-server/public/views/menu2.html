@@ -1,14 +1,16 @@
-
 <div class="container">
     <div class="row main-row" ng-controller="MenuController">
-        <div class="col-xs-12">
-        <button class="btn btn-xs btn-primary pull-right" ng-click="toggleDetails()">
-            {{showDetails ? 'Hide Details' : 'Show Details'}}
-        </button>
+        <div class="col-xs-12" ng-if="!showMenu">
+            <h3>{{message}}</h3>
+        </div>
+        <div class="col-xs-12" ng-if="showMenu">
+            <button class="btn btn-xs btn-primary pull-right" ng-click="toggleDetails()">
+                {{showDetails ? 'Hide Details' : 'Show Details'}}
+            </button>
             <!--TABS-->
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" ng-class="{active:isSelected(1)}">
-                    <a href="#home" aria-controls="all menu" role="tab" data-toggle="tab" ng-click="select(1)">All Menu</a>
+                    <a aria-controls="all menu" role="tab" data-toggle="tab" ng-click="select(1)">All Menu</a>
                 </li>
                 <li role="presentation" ng-class="{active:isSelected(2)}">
                     <a aria-controls="appetizers" role="tab" data-toggle="tab" ng-click="select(2)">Appetizers</a>
@@ -24,7 +26,7 @@
                 <ul class="media-list tab-pane fade in active">
                     <li class="media" ng-repeat="dish in dishes | filter: filtText">
                         <div class="media-left media-middle">
-                            <a ui-sref="app.dishdetails({id: dish._id})">
+                            <a ui-sref="app.dishdetails({id: dish.id})">
                                 <img class="media-object img-thumbnail" ng-src="{{dish.image}}" alt=""/>
                             </a>
                         </div>
