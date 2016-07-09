@@ -6,7 +6,7 @@
       "image": "images/uthapizza.png",
       "category": "mains",
       "label": "Hot",
-      "price": "4.99",
+      "price": 4.99,
       "description": "A unique combination of Indian Uthappam (pancake) and Italian pizza, topped with Cerignola olives, ripe vine cherry tomatoes, Vidalia onion, Guntur chillies and Buffalo Paneer.",
       "comments": [
         {
@@ -38,6 +38,18 @@
           "comment": "It's your birthday, we're gonna party!",
           "author": "25 Cent",
           "date": "2011-12-02T17:57:28.556094Z"
+        },
+        {
+          "author": "Shaunak Sen",
+          "rating": 5,
+          "comment": "Absolutely awesome",
+          "date": "2016-07-09T10:39:37.549Z"
+        },
+        {
+          "author": "Mini Sen",
+          "rating": "1",
+          "comment": "Bhuk Laga Hai",
+          "date": "2016-07-09T10:40:25.893Z"
         }
       ]
     },
@@ -209,6 +221,5 @@
       "description": "Award winning three-star Michelin chef with wide International experience having worked closely with whos-who in the culinary world, he specializes in creating mouthwatering Indo-Italian fusion experiences. He says, Put together the cuisines from the two craziest cultures, and you get a winning hit! Amma Mia!"
     }
   ],
-  "feedback": [
-  ]
+  "feedback": []
 }

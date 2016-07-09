@@ -1228,3 +1228,18 @@ $scope.dish = menuFactory.getDishes().get({id: parseInt($stateParams.id, 10)}).
 
 Here we used $promise
 
+Now we want our comment to be updated in server
+
+In services : MenuFactory we had
+
+this.getDishes = function () {
+            return $resource(baseURL + "dishes/:id", null, {'update': {method: 'PUT'}});
+        };
+
+We will use this now
+
+In CommentFormController
+menuFactory.getDishes().update({id: $scope.dish.id}, $scope.dish);
+
+update takes 2 params: id and updated object
+

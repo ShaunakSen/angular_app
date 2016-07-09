@@ -54,7 +54,7 @@
                         !commentsForm.name.$pristine}">
                             <label for="name" class="">Your name</label>
                             <input type="text" class="form-control" name="name" id="name"
-                                   ng-model="comments.name" required ng-change="testForm()"/>
+                                   ng-model="comments.name" required/>
                         <span class="help-block" ng-show="commentsForm.name.$error.required &&
                         !commentsForm.name.$pristine">Your name is required</span>
                         </div>
@@ -84,7 +84,7 @@
                         <div class="form-group"
                              ng-class="{'has-error':validateTextarea()}">
                         <textarea class="form-control" rows="3" name="comment" placeholder="YOUR COMMENTS"
-                                  ng-model="comments.comment" ng-change="testForm()"></textarea>
+                                  ng-model="comments.comment"></textarea>
                             <span class="help-block" ng-show="validateTextarea()">Your comments are required</span>
                         </div>
                         <button type="submit" name="submit" class="btn btn-primary btn-block"

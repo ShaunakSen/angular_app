@@ -113,7 +113,8 @@ myApp
              }
              );*/
 
-            $scope.dish = menuFactory.getDishes().get({id: parseInt($stateParams.id, 10)}).$promise.then(
+            $scope.dish = menuFactory.getDishes().get({id: parseInt($stateParams.id, 10)}).
+            $promise.then(
                 function (response) {
                     $scope.dish = response;
                     $scope.showDish = true;
@@ -154,7 +155,7 @@ myApp
                 }
             }
         }])
-    .controller('CommentFormController', ['$scope', function ($scope) {
+    .controller('CommentFormController', ['$scope', 'menuFactory', function ($scope, menuFactory) {
 
         //SETTING DEFAULT VALUES
         $scope.comments = {
@@ -193,10 +194,15 @@ myApp
             $scope.compatibleObject.author = $scope.comments.name;
             $scope.compatibleObject.rating = $scope.comments.ratings;
             $scope.compatibleObject.comment = $scope.comments.comment;
-            $scope.compatibleObject.date = new Date();
+            $scope.compatibleObject.date = new Date().toISOString();
             console.log($scope.compatibleObject);
 
             $scope.dish.comments.push($scope.compatibleObject);
+
+            //update on server
+
+            menuFactory.getDishes().update({id: $scope.dish.id}, $scope.dish);
+
             //restore defaults
 
             $scope.comments = {
@@ -231,9 +237,9 @@ myApp
 
             $scope.dish = menuFactory.getDishes().get({id: 0})
                 .$promise.then(function (response) {
-                        $scope.dish = response;
-                        $scope.showDish = true;
-                    },
+                    $scope.dish = response;
+                    $scope.showDish = true;
+                },
                     function (response) {
                         $scope.message = "Error: " + response.status + " " + response.statusText;
                     }
