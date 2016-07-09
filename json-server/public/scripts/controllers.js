@@ -11,14 +11,26 @@ myApp
             $scope.showDetails = !$scope.showDetails
         };
 
-        $scope.dishes = {};
-        menuFactory.getDishes().then(
+        /*$scope.dishes = {};
+         menuFactory.getDishes().then(
+         function (response) {
+         $scope.dishes = response.data;
+         $scope.showMenu = true;
+         // menu is now ready to be displayed
+         },
+         function (response) {
+         $scope.message = "Error: " + response.status + " " + response.statusText;
+         }
+         );*/
+
+        $scope.dishes = menuFactory.getDishes().query(
             function (response) {
-                $scope.dishes = response.data;
+                //success function
+                $scope.dishes = response;
                 $scope.showMenu = true;
-                // menu is now ready to be displayed
             },
             function (response) {
+                //error function
                 $scope.message = "Error: " + response.status + " " + response.statusText;
             }
         );
@@ -91,9 +103,19 @@ myApp
             $scope.showDish = false;
             $scope.message = "Loading...";
 
-            menuFactory.getDish(parseInt($stateParams.id, 10)).then(
+            /*menuFactory.getDish(parseInt($stateParams.id, 10)).then(
+             function (response) {
+             $scope.dish = response.data;
+             $scope.showDish = true;
+             },
+             function (response) {
+             $scope.message = "Error: " + response.status + " " + response.statusText;
+             }
+             );*/
+
+            $scope.dish = menuFactory.getDishes().get({id: parseInt($stateParams.id, 10)}).$promise.then(
                 function (response) {
-                    $scope.dish = response.data;
+                    $scope.dish = response;
                     $scope.showDish = true;
                 },
                 function (response) {
@@ -191,18 +213,32 @@ myApp
     .controller('IndexController', ['$scope', 'menuFactory', 'corporateFactory',
         function ($scope, menuFactory, corporateFactory) {
 
-            $scope.dish = {};
+            /*$scope.dish = {};*/
+
+
             $scope.showDish = false;
             $scope.message = "Loading...";
             $scope.promotions = menuFactory.getPromotions();
-            menuFactory.getDish(0).then(function (response) {
-                    $scope.dish = response.data;
-                    $scope.showDish = true;
-                },
-                function (response) {
-                    $scope.message = "Error: " + response.status + " " + response.statusText;
-                }
-            );
+
+            /*menuFactory.getDish(0).then(function (response) {
+             $scope.dish = response.data;
+             $scope.showDish = true;
+             },
+             function (response) {
+             $scope.message = "Error: " + response.status + " " + response.statusText;
+             }
+             );*/
+
+            $scope.dish = menuFactory.getDishes().get({id: 0})
+                .$promise.then(function (response) {
+                        $scope.dish = response;
+                        $scope.showDish = true;
+                    },
+                    function (response) {
+                        $scope.message = "Error: " + response.status + " " + response.statusText;
+                    }
+                );
+
             $scope.executiveChief = corporateFactory.getLeader(3);
         }])
     .controller('AboutController', ['$scope', 'corporateFactory', function ($scope, corporateFactory) {

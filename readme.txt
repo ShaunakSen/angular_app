@@ -1102,3 +1102,129 @@ Same for IndexController
 Update the views
 
 
+REST uses URI
+eg:
+http://abc.xyz/dishes/123
+
+Operations:
+
+GET -> READ
+POST -> CREATE
+PUT -> UPDATE
+DELETE -> DELETE
+
+
+POST http://www.confusion.food/feedback/
+
+Im CREATING new resource
+
+PUT http://abc.xyz/dishes/123
+
+UPDATE dish no 123
+
+ngResource
+
+This fecilitates commn with a server that exports a RESTful API
+
+It is a higher level abstraction than $http
+
+$resource default actions:
+
+{
+'get':{method: 'GET'},
+'save':{method: 'POST'},
+'query':{method: 'GET', isArray: true},
+'remove':{method: 'DELETE'},
+'delete':{method: 'DELETE'}
+};
+
+Built in methods: query,get,save,remove,delete
+
+
+examples:
+
+$scope.dishes = [resource goes here].method()
+
+1.$scope.dishes = $resource(baseURL + "dishes/:id", null, {'update':{method:'PUT'}}).query()
+
+here method used is query() so it returns a JSON object array
+
+here b4 we get data back $scope.dishes will be set to {} .. so we dont need to explicitly do this as we were doing earlier
+
+2. get() method
+
+   var dish =  $resource(baseURL + "dishes/:id", null, {'update':{method:'PUT'}}).get({id:0}, function(){
+        dish.name = 'ok';
+        dish.$save();
+   })
+
+
+Using ngResource:
+
+DI
+var myApp = angular.module('confusionApp', ['ui.router', 'ngResource'])
+
+In services
+
+Instead of using $http we will use $resource
+
+service('menuFactory', ['$resource', 'baseURL', function ($resource, baseURL) {
+
+this.getDishes = function () {
+    return $resource(baseURL + "dishes/:id", null, {'update': {method: 'PUT'}});
+};
+
+we had used another method called getDish .. we do not need that any more as in the above function we can simply pass
+an id
+
+
+In controllers
+
+In MenuController:
+
+$scope.dishes = menuFactory.getDishes().query();
+
+The query returns entire array
+
+By default b4 response is returned $scope.dishes = {}
+
+So we dont need to explicitly do that any more
+
+
+In dishDetailController
+
+$scope.dish = menuFactory.getDishes().get({id:parseInt($stateParams.id, 10)});
+
+In IndexController
+$scope.dish = menuFactory.getDishes().get({id:0});
+
+Now for Error Handling:
+
+In MenuController:
+$scope.dishes = menuFactory.getDishes().query(
+    function (response) {
+        //success function
+        $scope.dishes = response;
+        $scope.showMenu = true;
+    },
+    function (response) {
+        //error function
+        $scope.message = "Error: " + response.status + " " + response.statusText;
+    }
+);
+
+In dishDetailController
+
+$scope.dish = menuFactory.getDishes().get({id: parseInt($stateParams.id, 10)}).
+    $promise.then(
+        function (response) {
+            $scope.dish = response;
+            $scope.showDish = true;
+        },
+        function (response) {
+            $scope.message = "Error: " + response.status + " " + response.statusText;
+        }
+    );
+
+Here we used $promise
+

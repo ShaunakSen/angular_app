@@ -1,4 +1,4 @@
-var myApp = angular.module('confusionApp', ['ui.router'])
+var myApp = angular.module('confusionApp', ['ui.router', 'ngResource'])
     .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('app', {
