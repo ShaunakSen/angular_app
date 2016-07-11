@@ -221,5 +221,19 @@
       "description": "Award winning three-star Michelin chef with wide International experience having worked closely with whos-who in the culinary world, he specializes in creating mouthwatering Indo-Italian fusion experiences. He says, Put together the cuisines from the two craziest cultures, and you get a winning hit! Amma Mia!"
     }
   ],
-  "feedback": []
+  "feedback": [
+    {
+      "mychannel": "tel",
+      "firstName": "Shaunak",
+      "lastName": "Sen",
+      "agree": true,
+      "email": "pradip_skematic@yahoo.co.in",
+      "tel": {
+        "areaCode": "123",
+        "number": "09831034275"
+      },
+      "comments": "jkdkal aslkdmlsamda",
+      "id": 1
+    }
+  ]
 }

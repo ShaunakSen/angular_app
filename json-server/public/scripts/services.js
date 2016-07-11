@@ -20,7 +20,12 @@ angular.module('confusionApp')
         };*/
         this.getPromotions = function () {
             return $resource(baseURL + "promotions/:id", null, {'update': {method: 'PUT'}});
-        }
+        };
+
+        this.sendFeedback = function () {
+            return $resource(baseURL + "feedback");
+        };
+
     }])
     .factory('corporateFactory',  ['$resource', 'baseURL', function ($resource, baseURL) {
 

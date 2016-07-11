@@ -68,7 +68,7 @@ myApp
         $scope.invalidChannelSelection = false;
 
     }])
-    .controller('FeedbackController', ['$scope', function ($scope) {
+    .controller('FeedbackController', ['$scope', 'menuFactory', function ($scope, menuFactory) {
 
         $scope.sendFeedback = function () {
             console.log($scope.feedback);
@@ -81,6 +81,10 @@ myApp
                 $scope.invalidChannelSelection = false;
                 //here ideally u would issue AJAX call to send data to server
                 // restore default values now
+
+                menuFactory.sendFeedback().save($scope.feedback);
+
+
                 $scope.feedback = {
                     mychannel: "",
                     firstName: "",
@@ -113,8 +117,7 @@ myApp
              }
              );*/
 
-            $scope.dish = menuFactory.getDishes().get({id: parseInt($stateParams.id, 10)}).
-            $promise.then(
+            $scope.dish = menuFactory.getDishes().get({id: parseInt($stateParams.id, 10)}).$promise.then(
                 function (response) {
                     $scope.dish = response;
                     $scope.showDish = true;
@@ -246,17 +249,32 @@ myApp
 
             $scope.dish = menuFactory.getDishes().get({id: 0})
                 .$promise.then(function (response) {
-                    $scope.dish = response;
-                    $scope.showDish = true;
-                },
+                        $scope.dish = response;
+                        $scope.showDish = true;
+                    },
                     function (response) {
                         $scope.message = "Error: " + response.status + " " + response.statusText;
                     }
                 );
 
             $scope.executiveChief = corporateFactory.getLeaders().get({id: 3})
+                .$promise.then(function (response) {
+                        $scope.executiveChief = response;
+                    },
+                    function (response) {
+                        $scope.message = "Error: " + response.status + " " + response.statusText;
+                    }
+                );
         }])
     .controller('AboutController', ['$scope', 'corporateFactory', function ($scope, corporateFactory) {
-        $scope.leaders = corporateFactory.getLeaders()
+        $scope.leaders = corporateFactory.getLeaders().query(
+            function (response) {
+                $scope.leaders = response;
+            },
+            function (response) {
+                //error function
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        )
     }]);
 // implement the IndexController and About Controller here
