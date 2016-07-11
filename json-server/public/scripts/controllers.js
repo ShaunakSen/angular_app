@@ -68,7 +68,10 @@ myApp
         $scope.invalidChannelSelection = false;
 
     }])
-    .controller('FeedbackController', ['$scope', 'menuFactory', function ($scope, menuFactory) {
+    .controller('FeedbackController', ['$scope', 'feedbackFactory', function ($scope, feedbackFactory) {
+
+        $scope.feedbackStatus = false;
+        $scope.message = "";
 
         $scope.sendFeedback = function () {
             console.log($scope.feedback);
@@ -82,18 +85,29 @@ myApp
                 //here ideally u would issue AJAX call to send data to server
                 // restore default values now
 
-                menuFactory.sendFeedback().save($scope.feedback);
+                feedbackFactory.sendFeedback().save($scope.feedback,
+                    function (response) {
+                        $scope.feedbackStatus = true;
+                        console.log(response);
+                        //OK...Set Default Values Now
+                        $scope.feedback = {
+                            mychannel: "",
+                            firstName: "",
+                            lastName: "",
+                            agree: false,
+                            email: ""
+                        };
+                        $scope.feedbackForm.$setPristine();
+                        console.log('Restored default values.... ' + $scope.feedback);
+                        $scope.message = "Feedback Sent"
 
+                    },
+                    function (response) {
+                        console.log(response);
+                        $scope.message = "Error: " + response.status + " " + response.statusText;
+                    }
+                );
 
-                $scope.feedback = {
-                    mychannel: "",
-                    firstName: "",
-                    lastName: "",
-                    agree: false,
-                    email: ""
-                };
-                $scope.feedbackForm.$setPristine();
-                console.log('Restored default values.... ' + $scope.feedback);
 
             }
         }
@@ -224,12 +238,14 @@ myApp
 
             /*$scope.dish = {};*/
 
-
+            $scope.showPromotion = false;
             $scope.showDish = false;
+            $scope.showLeader = false;
             $scope.message = "Loading...";
             $scope.promotions = menuFactory.getPromotions().query(
                 function (response) {
                     //success function
+                    $scope.showPromotion = true;
                     $scope.promotions = response;
                 },
                 function (response) {
@@ -259,6 +275,7 @@ myApp
 
             $scope.executiveChief = corporateFactory.getLeaders().get({id: 3})
                 .$promise.then(function (response) {
+                        $scope.showLeader = true;
                         $scope.executiveChief = response;
                     },
                     function (response) {
@@ -267,8 +284,13 @@ myApp
                 );
         }])
     .controller('AboutController', ['$scope', 'corporateFactory', function ($scope, corporateFactory) {
+
+        $scope.message = "Loading...";
+        $scope.showLeaders = false;
+
         $scope.leaders = corporateFactory.getLeaders().query(
             function (response) {
+                $scope.showLeaders = true;
                 $scope.leaders = response;
             },
             function (response) {
