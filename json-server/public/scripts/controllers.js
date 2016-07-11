@@ -224,7 +224,16 @@ myApp
 
             $scope.showDish = false;
             $scope.message = "Loading...";
-            $scope.promotions = menuFactory.getPromotions();
+            $scope.promotions = menuFactory.getPromotions().query(
+                function (response) {
+                    //success function
+                    $scope.promotions = response;
+                },
+                function (response) {
+                    //error function
+                    $scope.message = "Error: " + response.status + " " + response.statusText;
+                }
+            );
 
             /*menuFactory.getDish(0).then(function (response) {
              $scope.dish = response.data;
@@ -245,7 +254,7 @@ myApp
                     }
                 );
 
-            $scope.executiveChief = corporateFactory.getLeader(3);
+            $scope.executiveChief = corporateFactory.getLeaders().get({id: 3})
         }])
     .controller('AboutController', ['$scope', 'corporateFactory', function ($scope, corporateFactory) {
         $scope.leaders = corporateFactory.getLeaders()

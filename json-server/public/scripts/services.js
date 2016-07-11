@@ -3,17 +3,7 @@ angular.module('confusionApp')
     .service('menuFactory', ['$http', '$resource', 'baseURL', function ($http, $resource, baseURL) {
 
 
-        var promotions = [
-            {
-                _id: 0,
-                name: 'Weekend Grand Buffet',
-                image: 'images/buffet.png',
-                label: 'New',
-                price: '19.99',
-                description: 'Featuring mouthwatering combinations with a choice of five different salads, six enticing appetizers, six main entrees and five choicest desserts. Free flowing bubbly and soft drinks. All for just $19.99 per person ',
-            }
 
-        ];
 
         //define functions here
 
@@ -29,14 +19,14 @@ angular.module('confusionApp')
             return $http.get(baseURL + "dishes/" + index);
         };*/
         this.getPromotions = function () {
-            return promotions;
+            return $resource(baseURL + "promotions/:id", null, {'update': {method: 'PUT'}});
         }
     }])
-    .factory('corporateFactory', function () {
+    .factory('corporateFactory',  ['$resource', 'baseURL', function ($resource, baseURL) {
 
         var corpfac = {};
 
-        var leadership = [
+        /*var leadership = [
             {
                 name: "Peter Pan",
                 image: 'images/alberto.png',
@@ -66,12 +56,17 @@ angular.module('confusionApp')
                 description: "Award winning three-star Michelin chef with wide International experience having worked closely with whos-who in the culinary world, he specializes in creating mouthwatering Indo-Italian fusion experiences. He says, Put together the cuisines from the two craziest cultures, and you get a winning hit! Amma Mia!"
             }
 
-        ];
-        corpfac.getLeader = function (index) {
+        ];*/
+
+        /*corpfac.getLeader = function (index) {
             return leadership[index];
         };
         corpfac.getLeaders = function () {
             return leadership;
+        };*/
+
+        corpfac.getLeaders = function () {
+            return $resource(baseURL + "leadership/:id", null, {'update': {method: 'PUT'}});
         };
 
         return corpfac;
@@ -81,4 +76,4 @@ angular.module('confusionApp')
         // Remember this is a factory not a service
 
 
-    });
+    }]);

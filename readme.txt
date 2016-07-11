@@ -1243,3 +1243,35 @@ menuFactory.getDishes().update({id: $scope.dish.id}, $scope.dish);
 
 update takes 2 params: id and updated object
 
+If we are creating new object we should use save method instead of update
+
+
+Angular Testing
+
+Testing works in angular really well
+The person who developed angular was a testing engg at Google!!
+
+Test Driven Dev:
+
+Write an automated test case defining desired func
+
+write application code to pass the test
+
+Refactor code to meet standards
+
+
+Unit Testing
+
+This means testing indv units of code
+
+Angular has so many units: controllers, filters, factories, services
+
+These are units of code
+
+Note angular controllers do not directly interact with DOM
+they put data into $scope that that in turn, through angular changes the DOM
+
+This separation enables easy testing
+
+
+

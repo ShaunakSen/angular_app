@@ -117,7 +117,7 @@ app.controller('CommentFormController', ['$scope', function ($scope) {
         $scope.compatibleObject.author = $scope.comments.name;
         $scope.compatibleObject.rating = $scope.comments.ratings;
         $scope.compatibleObject.comment = $scope.comments.comment;
-        $scope.compatibleObject.date = new Date();
+        $scope.compatibleObject.date = new Date().toISOString();
         console.log($scope.compatibleObject);
 
         $scope.dish.comments.push($scope.compatibleObject);
